@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог напитков</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-neutral-100 text-neutral-900 font-sans">
+  <div class="max-w-5xl mx-auto p-6">
+    <!-- Заголовок -->
+    <h1 class="text-3xl font-bold text-center mb-8 text-neutral-800">Каталоги напитков</h1>
+
+    <!-- Каталоги -->
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Каталог 1 -->
+      <div onclick="openCatalog(1)" class="bg-white shadow-lg rounded-2xl cursor-pointer overflow-hidden hover:shadow-xl transition">
+        <div class="h-40 bg-neutral-300 flex items-center justify-center text-neutral-600">Афиша 1</div>
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">Коктейли Premium</h2>
+          <p class="text-sm text-neutral-600">Элитная подборка напитков</p>
+        </div>
+      </div>
+
+      <!-- Каталог 2 -->
+      <div onclick="openCatalog(2)" class="bg-white shadow-lg rounded-2xl cursor-pointer overflow-hidden hover:shadow-xl transition">
+        <div class="h-40 bg-neutral-300 flex items-center justify-center text-neutral-600">Афиша 2</div>
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">Классические коктейли</h2>
+          <p class="text-sm text-neutral-600">Любимые напитки на все случаи</p>
+        </div>
+      </div>
+
+      <!-- Каталог 3 -->
+      <div onclick="openCatalog(3)" class="bg-white shadow-lg rounded-2xl cursor-pointer overflow-hidden hover:shadow-xl transition">
+        <div class="h-40 bg-neutral-300 flex items-center justify-center text-neutral-600">Афиша 3</div>
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">Авторские коктейли</h2>
+          <p class="text-sm text-neutral-600">Уникальные сочетания</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 relative">
+      <button onclick="closeCatalog()" class="absolute top-4 right-4 text-neutral-600 hover:text-neutral-900">✕</button>
+      <h2 id="catalogTitle" class="text-2xl font-bold mb-4"></h2>
+
+      <div id="catalogItems" class="grid sm:grid-cols-2 gap-6">
+        <!-- Карточки напитков будут подставлены -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const catalogs = {
+      1: {
+        title: "Коктейли Premium",
+        items: [
+          { name: "Martini Deluxe", desc: "Изысканный вкус", img: "https://via.placeholder.com/300x200" },
+          { name: "Gold Negroni", desc: "Горько-сладкий баланс", img: "https://via.placeholder.com/300x200" },
+          { name: "Velvet Sour", desc: "Нежная кислинка", img: "https://via.placeholder.com/300x200" }
+        ]
+      },
+      2: {
+        title: "Классические коктейли",
+        items: [
+          { name: "Mojito", desc: "Свежесть лайма и мяты", img: "https://via.placeholder.com/300x200" },
+          { name: "Old Fashioned", desc: "Классика виски", img: "https://via.placeholder.com/300x200" },
+          { name: "Margarita", desc: "Легендарный цитрусовый вкус", img: "https://via.placeholder.com/300x200" }
+        ]
+      },
+      3: {
+        title: "Авторские коктейли",
+        items: [
+          { name: "Peach Blossom", desc: "Персик и жасмин", img: "https://via.placeholder.com/300x200" },
+          { name: "Coffee Passion", desc: "Кофе и маракуйя", img: "https://via.placeholder.com/300x200" },
+          { name: "Pumpkin Clear", desc: "Осенний эксперимент", img: "https://via.placeholder.com/300x200" }
+        ]
+      }
+    };
+
+    function openCatalog(id) {
+      const catalog = catalogs[id];
+      document.getElementById("catalogTitle").textContent = catalog.title;
+      const container = document.getElementById("catalogItems");
+      container.innerHTML = "";
+      catalog.items.forEach(item => {
+        container.innerHTML += `
+          <div class='bg-neutral-50 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition'>
+            <img src="${item.img}" class="w-full h-40 object-cover"/>
+            <div class="p-4">
+              <h3 class="text-lg font-semibold mb-1">${item.name}</h3>
+              <p class="text-sm text-neutral-600">${item.desc}</p>
+            </div>
+          </div>`;
+      });
+      document.getElementById("modal").classList.remove("hidden");
+      document.getElementById("modal").classList.add("flex");
+    }
+
+    function closeCatalog() {
+      document.getElementById("modal").classList.add("hidden");
+      document.getElementById("modal").classList.remove("flex");
+    }
+  </script>
+</body>
+</html>
