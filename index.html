@@ -3,186 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Каталоги напитков — MVP</title>
+  <title>Catalog MVP</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/framer-motion/dist/framer-motion.umd.js"></script>
   <style>
-    /* ====== ФОН: фиксированное изображение + матовое стекло слои ====== */
-    .frosted-wrap { position: fixed; inset: 0; z-index: -10; overflow: hidden; }
-    .frosted-image { position: absolute; inset: 0; background-position: center; background-size: cover; background-repeat: no-repeat; filter: blur(20px) brightness(.95) saturate(110%); transform: scale(1.06); }
-    .frosted-spot-1, .frosted-spot-2 { position: absolute; inset: 0; filter: blur(30px); transform: scale(1.03); }
-    .frosted-spot-1 { background: radial-gradient(900px 900px at 20% 25%, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.75) 40%, rgba(230,230,230,0.45) 65%, transparent 80%); }
-    .frosted-spot-2 { background: radial-gradient(700px 700px at 70% 70%, rgba(255,255,255,0.9) 0%, rgba(235,235,235,0.6) 45%, rgba(215,215,215,0.35) 70%, transparent 85%); }
-    .frosted-noise { position:absolute; inset:0; background-image: url('https://res.cloudinary.com/glide/image/fetch/f_auto,w_675,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FYHvEGQ7gKxwfedZm9Io8.png'); background-size: 300px 300px; opacity: 0.12; mix-blend-mode: overlay; pointer-events: none; }
-
-    /* Скрытие скроллбаров в карусели */
-    .scrollbar-hide::-webkit-scrollbar { display: none; }
-    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* Анимация появления карточек внутри bottom sheet */
-    .fade-slide { opacity: 0; transform: translateY(18px); transition: opacity .45s ease, transform .45s ease; }
-    .fade-slide.active { opacity: 1; transform: translateY(0); }
-
-    /* Базовые glass стили */
-    .glass { background: rgba(255,255,255,0.38); backdrop-filter: blur(14px) saturate(120%); -webkit-backdrop-filter: blur(14px) saturate(120%); }
-    .glass-strong { background: rgba(255,255,255,0.5); backdrop-filter: blur(20px) saturate(130%); -webkit-backdrop-filter: blur(20px) saturate(130%); }
-
-    /* Hover для афиш: усиливаем матовость нижней панели */
-    .poster .glass { transition: backdrop-filter .35s ease, background .35s ease, transform .35s ease; }
-    .poster:hover .glass { background: rgba(255,255,255,0.62); backdrop-filter: blur(28px) saturate(140%); -webkit-backdrop-filter: blur(28px) saturate(140%); }
-
-    /* Hover-эффект для самой афиши (небольшое увеличение) */
-    .poster { transition: transform .28s ease, box-shadow .28s ease; }
-    .poster:hover { transform: scale(1.02); }
-
-    /* Улучшаем читаемость заголовка */
-    .page-title { text-shadow: 0 6px 20px rgba(255,255,255,0.45); }
-
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://res.cloudinary.com/glide/image/fetch/f_auto,w_675,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FYHvEGQ7gKxwfedZm9Io8.png') no-repeat center center fixed;
+      background-size: cover;
+    }
   </style>
 </head>
-<body class="relative text-neutral-900 font-sans min-h-screen">
+<body class="text-gray-900">
+  <div class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
+    <h1 class="absolute top-10 text-4xl font-bold text-white drop-shadow-lg z-20">
+      Каталоги коктейлей
+    </h1>
 
-  <!-- ФОН (фиксированное изображение) + матовые слои -->
-  <div class="frosted-wrap">
-    <div class="frosted-image" style="background-image: url('https://res.cloudinary.com/glide/image/fetch/f_auto,w_675,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FYHvEGQ7gKxwfedZm9Io8.png'); background-attachment: fixed;"></div>
-    <div class="frosted-spot-1"></div>
-    <div class="frosted-spot-2"></div>
-    <div class="frosted-noise"></div>
-  </div>
-
-  <!-- Контент -->
-  <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-4xl md:text-5xl font-bold text-center mb-8 text-neutral-900 page-title">Каталоги напитков</h1>
-
-    <!-- Афиши каталогов (большие вертикальные карточки) -->
-    <div class="grid md:grid-cols-3 gap-8">
-      <!-- Каталог 1 -->
-      <div onclick="openCatalog(1)" class="poster relative cursor-pointer rounded-3xl overflow-hidden shadow-lg transition">
-        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-[30rem] object-cover" alt="Premium Poster">
-        <div class="absolute bottom-0 left-0 w-full glass p-6 transition-all">
-          <h2 class="text-2xl font-semibold text-neutral-900">Premium Cocktails</h2>
-          <p class="text-sm text-neutral-700 mt-1">Элитный тариф с уникальными коктейлями</p>
-          <ul class="text-sm text-neutral-700/90 mt-2 space-y-1">
-            <li>• Быстрая подача</li>
-            <li>• Эксклюзивные рецепты</li>
-            <li>• Персональные рекомендации</li>
-          </ul>
+    <div id="carousel" class="flex space-x-6 overflow-x-auto p-6 snap-x snap-mandatory">
+      <!-- Каталоги -->
+      <div class="snap-center shrink-0 relative w-72 h-[420px] rounded-3xl shadow-2xl overflow-hidden cursor-pointer group">
+        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute bottom-0 w-full p-6 bg-white/30 backdrop-blur-md text-gray-900 transition duration-300 group-hover:backdrop-blur-xl group-hover:bg-white/50">
+          <h2 class="text-xl font-bold">Premium Menu</h2>
+          <p class="text-sm">Лучшие коктейли для особых событий</p>
         </div>
       </div>
 
-      <!-- Каталог 2 -->
-      <div onclick="openCatalog(2)" class="poster relative cursor-pointer rounded-3xl overflow-hidden shadow-lg transition">
-        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-[30rem] object-cover" alt="Classic Poster">
-        <div class="absolute bottom-0 left-0 w-full glass p-6 transition-all">
-          <h2 class="text-2xl font-semibold text-neutral-900">Classic Cocktails</h2>
-          <p class="text-sm text-neutral-700 mt-1">Любимые коктейли в вечной классике</p>
-          <ul class="text-sm text-neutral-700/90 mt-2 space-y-1">
-            <li>• Доступные цены</li>
-            <li>• Классические формулы</li>
-            <li>• Для любых мероприятий</li>
-          </ul>
+      <div class="snap-center shrink-0 relative w-72 h-[420px] rounded-3xl shadow-2xl overflow-hidden cursor-pointer group">
+        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute bottom-0 w-full p-6 bg-white/30 backdrop-blur-md text-gray-900 transition duration-300 group-hover:backdrop-blur-xl group-hover:bg-white/50">
+          <h2 class="text-xl font-bold">Signature Collection</h2>
+          <p class="text-sm">Фирменные рецепты от наших барменов</p>
         </div>
       </div>
 
-      <!-- Каталог 3 -->
-      <div onclick="openCatalog(3)" class="poster relative cursor-pointer rounded-3xl overflow-hidden shadow-lg transition">
-        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-[30rem] object-cover" alt="Signature Poster">
-        <div class="absolute bottom-0 left-0 w-full glass p-6 transition-all">
-          <h2 class="text-2xl font-semibold text-neutral-900">Signature Cocktails</h2>
-          <p class="text-sm text-neutral-700 mt-1">Авторские сочетания и редкие ингредиенты</p>
-          <ul class="text-sm text-neutral-700/90 mt-2 space-y-1">
-            <li>• Уникальные подачи</li>
-            <li>• Премиум-инвентарь</li>
-            <li>• Для презентаций и шоу</li>
-          </ul>
+      <div class="snap-center shrink-0 relative w-72 h-[420px] rounded-3xl shadow-2xl overflow-hidden cursor-pointer group">
+        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute bottom-0 w-full p-6 bg-white/30 backdrop-blur-md text-gray-900 transition duration-300 group-hover:backdrop-blur-xl group-hover:bg-white/50">
+          <h2 class="text-xl font-bold">Seasonal Specials</h2>
+          <p class="text-sm">Меню, вдохновленное временем года</p>
+        </div>
+      </div>
+
+      <div class="snap-center shrink-0 relative w-72 h-[420px] rounded-3xl shadow-2xl overflow-hidden cursor-pointer group">
+        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute bottom-0 w-full p-6 bg-white/30 backdrop-blur-md text-gray-900 transition duration-300 group-hover:backdrop-blur-xl group-hover:bg-white/50">
+          <h2 class="text-xl font-bold">Classic Line</h2>
+          <p class="text-sm">Классические коктейли в премиальном исполнении</p>
+        </div>
+      </div>
+
+      <div class="snap-center shrink-0 relative w-72 h-[420px] rounded-3xl shadow-2xl overflow-hidden cursor-pointer group">
+        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute bottom-0 w-full p-6 bg-white/30 backdrop-blur-md text-gray-900 transition duration-300 group-hover:backdrop-blur-xl group-hover:bg-white/50">
+          <h2 class="text-xl font-bold">Party Set</h2>
+          <p class="text-sm">Идеально для вечеринок</p>
+        </div>
+      </div>
+
+      <div class="snap-center shrink-0 relative w-72 h-[420px] rounded-3xl shadow-2xl overflow-hidden cursor-pointer group">
+        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute bottom-0 w-full p-6 bg-white/30 backdrop-blur-md text-gray-900 transition duration-300 group-hover:backdrop-blur-xl group-hover:bg-white/50">
+          <h2 class="text-xl font-bold">Luxury Experience</h2>
+          <p class="text-sm">Для настоящих ценителей</p>
+        </div>
+      </div>
+
+      <div class="snap-center shrink-0 relative w-72 h-[420px] rounded-3xl shadow-2xl overflow-hidden cursor-pointer group">
+        <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute bottom-0 w-full p-6 bg-white/30 backdrop-blur-md text-gray-900 transition duration-300 group-hover:backdrop-blur-xl group-hover:bg-white/50">
+          <h2 class="text-xl font-bold">Experimental Lab</h2>
+          <p class="text-sm">Смелые вкусовые эксперименты</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Пример раскрытого каталога -->
+    <div class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-30 flex items-center justify-center" id="modal">
+      <div class="bg-white/40 backdrop-blur-xl rounded-3xl shadow-2xl w-11/12 md:w-3/4 lg:w-2/3 h-5/6 overflow-y-auto p-6">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900">Каталог</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <!-- Карточки напитков -->
+          <div class="relative rounded-2xl overflow-hidden shadow-lg">
+            <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-48 object-cover" />
+            <div class="absolute bottom-0 w-full p-4 bg-white/30 backdrop-blur-md text-gray-900">
+              <h3 class="font-bold">Cocktail 1</h3>
+              <p class="text-sm">Описание коктейля и цена</p>
+            </div>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden shadow-lg">
+            <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-48 object-cover" />
+            <div class="absolute bottom-0 w-full p-4 bg-white/30 backdrop-blur-md text-gray-900">
+              <h3 class="font-bold">Cocktail 2</h3>
+              <p class="text-sm">Описание коктейля и цена</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Затемнение -->
-  <div id="overlay" onclick="closeCatalog()" class="fixed inset-0 bg-black/30 hidden"></div>
-
-  <!-- Slide-in Bottom Sheet -->
-  <div id="sheet" class="fixed inset-x-0 bottom-0 glass-strong rounded-t-3xl shadow-2xl hidden transition-transform transform translate-y-full max-h-[90vh] flex flex-col">
-    <div class="w-12 h-1.5 bg-neutral-400/60 rounded-full mx-auto my-3"></div>
-    <div class="flex items-center justify-between px-6">
-      <h2 id="catalogTitle" class="text-2xl font-bold text-neutral-900"></h2>
-      <button onclick="closeCatalog()" class="text-neutral-700 hover:text-neutral-900 text-xl">✕</button>
-    </div>
-
-    <!-- Карусель с кнопками -->
-    <div class="relative flex items-center px-10 py-4">
-      <button id="prevBtn" class="hidden md:flex absolute -left-1.5 h-16 w-10 glass rounded-full items-center justify-center text-xl font-bold hover:bg-white/60 transition z-10 select-none">&lt;</button>
-      <div id="catalogItems" class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pr-6 pl-6"></div>
-      <button id="nextBtn" class="hidden md:flex absolute -right-1.5 h-16 w-10 glass rounded-full items-center justify-center text-xl font-bold hover:bg-white/60 transition z-10 select-none">&gt;</button>
-    </div>
-  </div>
-
-  <script>
-    const IMG = "https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg";
-
-    function rnd() {
-      return {
-        price: (Math.random()*15 + 5).toFixed(2) + ' $',
-        abv: (Math.random()*15 + 5).toFixed(0) + '%',
-        volume: (Math.random()*150 + 150).toFixed(0) + ' мл',
-        rating: (Math.random()*2 + 3).toFixed(1) + ' ⭐'
-      }
-    }
-
-    const catalogs = {
-      1: { title: "Premium Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Premium Cocktail ${i+1}`, desc: "Изысканный вкус", img: IMG, ...rnd() })) },
-      2: { title: "Classic Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Classic Cocktail ${i+1}`, desc: "Любимые напитки", img: IMG, ...rnd() })) },
-      3: { title: "Signature Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Signature Cocktail ${i+1}`, desc: "Уникальные сочетания", img: IMG, ...rnd() })) }
-    };
-
-    function openCatalog(id) {
-      const catalog = catalogs[id];
-      document.getElementById("catalogTitle").textContent = catalog.title;
-
-      const container = document.getElementById("catalogItems");
-      container.innerHTML = "";
-
-      catalog.items.forEach((item, idx) => {
-        const card = document.createElement('div');
-        card.className = 'flex-none snap-center glass rounded-3xl shadow-lg overflow-hidden w-72 hover:shadow-2xl transition transform fade-slide';
-        card.innerHTML = `
-          <img src='${item.img}' alt='${item.name}' class='w-full h-80 object-cover'/>
-          <div class='p-4'>
-            <h3 class='text-lg font-semibold mb-1 text-neutral-900'>${item.name}</h3>
-            <p class='text-sm text-neutral-700 mb-1'>${item.desc}</p>
-            <p class='text-sm text-neutral-600'>${item.price} • ${item.abv} • ${item.volume} • ${item.rating}</p>
-          </div>`;
-        container.appendChild(card);
-        setTimeout(()=>card.classList.add('active'), 40 + idx*20);
-      });
-
-      document.getElementById("overlay").classList.remove("hidden");
-      const sheet = document.getElementById("sheet");
-      sheet.classList.remove("hidden","translate-y-full");
-      sheet.classList.add("translate-y-0");
-
-      // Кнопки перелистывания (десктоп)
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      prevBtn.style.display = "flex";
-      nextBtn.style.display = "flex";
-
-      const firstCard = container.querySelector('div');
-      const gap = 24; // gap-6
-      const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : 288;
-      const scrollStep = Math.round(cardWidth + gap);
-
-      prevBtn.onclick = ()=> container.scrollBy({ left: -scrollStep, behavior: 'smooth' });
-      nextBtn.onclick = ()=> container.scrollBy({ left:  scrollStep, behavior: 'smooth' });
-    }
-
-    function closeCatalog() {
-      document.getElementById("overlay").classList.add("hidden");
-      const sheet = document.getElementById("sheet");
-      sheet.classList.add("translate-y-full");
-      setTimeout(() => sheet.classList.add("hidden"), 300);
-    }
-  </script>
 </body>
 </html>
