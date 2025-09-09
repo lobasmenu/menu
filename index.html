@@ -1,252 +1,265 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Каталоги напитков</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: url('background.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Каталоги напитков</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url("https://res.cloudinary.com/glide/image/fetch/f_auto,w_675,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/YHvEGQ7gKxwfedZm9Io8.png") repeat center center fixed;
+    background-size: contain;
+  }
 
-    h1 {
-      text-align: center;
-      padding: 40px 20px 20px;
-      font-size: 2.5em;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px 40px;
+    justify-items: center;
+  }
 
-    h2 {
-      text-align: center;
-      margin: 0;
-      font-size: 2em;
-      padding: 10px 20px;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
+  .poster {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .poster:hover {
+    transform: scale(1.03);
+  }
 
-    .catalogs {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 30px;
-      justify-items: center;
-      padding: 40px 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  .glass {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+  }
 
-    .catalog {
-      width: 100%;
-      max-width: 300px;
-      aspect-ratio: 2 / 3;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+  .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 16px;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    transition: backdrop-filter 0.4s ease, background 0.4s ease;
+  }
+  .poster:hover .overlay {
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.25);
+  }
 
-    .catalog:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
-    }
+  .decorative-glass {
+    margin: 40px 40px;
+    border-radius: 24px;
+    height: 18rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(22px) saturate(120%);
+    -webkit-backdrop-filter: blur(22px) saturate(120%);
+    position: relative;
+  }
 
-    .catalog img {
-      width: 100%;
-      height: 80%;
-      object-fit: cover;
-    }
+  .decorative-glass::before {
+    content: "";
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 70%);
+    pointer-events: none;
+  }
 
-    .catalog-title {
-      text-align: center;
-      padding: 10px;
-      font-size: 1.2em;
-    }
+  .decorative-text {
+    font-size: 3rem;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    font-weight: bold;
+    text-align: center;
+    z-index: 1;
+  }
 
-    /* Slide-in overlay */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      align-items: flex-start;
-      justify-content: center;
-      z-index: 1000;
-    }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-    .overlay.active {
-      display: flex;
-    }
+  .fade-slide { opacity: 0; transform: translateY(18px); transition: opacity .45s ease, transform .45s ease; }
+  .fade-slide.active { opacity: 1; transform: translateY(0); }
 
-    .slide-window {
-      background: rgba(20, 20, 20, 0.95);
-      backdrop-filter: blur(15px);
-      width: 90%;
-      max-width: 900px;
-      border-radius: 20px 20px 0 0;
-      transform: translateY(100%);
-      animation: slideIn 0.5s forwards;
-      padding: 20px 30px 40px;
-      overflow-y: auto;
-      max-height: 90%;
-      box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.7);
-    }
+  .drink-card {
+    width: 200px;
+    height: 360px;
+    border-radius: 24px;
+    overflow: hidden;
+    flex: none;
+    scroll-snap-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  .drink-card:hover {
+    transform: scale(1.05);
+  }
+  .drink-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .drink-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 14px;
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    color: #000;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  .drink-card:hover .drink-info {
+    background: rgba(255,255,255,0.45);
+  }
 
-    @keyframes slideIn {
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    .slide-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .slide-header h3 {
-      margin: 0;
-      font-size: 2em;
-    }
-
-    .slide-header p {
-      margin: 8px 0 0;
-      font-size: 1.1em;
-      color: #ccc;
-    }
-
-    .drinks {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      padding: 10px 0;
-    }
-
-    .drink {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .drink:hover {
-      transform: translateY(-6px) scale(1.02);
-    }
-
-    .drink img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .drink-info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      padding: 10px;
-      font-size: 0.9em;
-      text-align: center;
-      transition: max-height 0.3s ease, padding 0.3s ease;
-      max-height: 50px;
-      overflow: hidden;
-    }
-
-    .drink:hover .drink-info {
-      max-height: 150px;
-      padding: 15px;
-    }
-  </style>
+  #sheet {
+    max-height: 90vh;
+  }
+</style>
 </head>
-<body>
-  <h1>LOBAS EVENT</h1>
-  <h2>Каталоги напитков</h2>
+<body class="relative text-neutral-900 font-sans min-h-screen">
 
-  <div class="catalogs">
-    <div class="catalog" onclick="openCatalog('Коктейли', 'Самые популярные авторские коктейли нашего бара')">
-      <img src="catalog1.jpg" alt="Коктейли">
-      <div class="catalog-title">Коктейли</div>
-    </div>
-    <div class="catalog" onclick="openCatalog('Лимонады', 'Освежающие лимонады с натуральными ингредиентами')">
-      <img src="catalog2.jpg" alt="Лимонады">
-      <div class="catalog-title">Лимонады</div>
-    </div>
-    <div class="catalog" onclick="openCatalog('Вина', 'Подборка красных, белых и игристых вин')">
-      <img src="catalog3.jpg" alt="Вина">
-      <div class="catalog-title">Вина</div>
-    </div>
-    <div class="catalog" onclick="openCatalog('Пиво', 'Лучшие сорта крафтового и классического пива')">
-      <img src="catalog4.jpg" alt="Пиво">
-      <div class="catalog-title">Пиво</div>
-    </div>
-    <div class="catalog" onclick="openCatalog('Чай', 'Ароматные чаи со всего мира')">
-      <img src="catalog5.jpg" alt="Чай">
-      <div class="catalog-title">Чай</div>
-    </div>
-    <div class="catalog" onclick="openCatalog('Кофе', 'Авторские кофейные напитки')">
-      <img src="catalog6.jpg" alt="Кофе">
-      <div class="catalog-title">Кофе</div>
-    </div>
-    <div class="catalog" onclick="openCatalog('Десерты', 'Сладкие дополнения к напиткам')">
-      <img src="catalog7.jpg" alt="Десерты">
-      <div class="catalog-title">Десерты</div>
+<h1 class="text-4xl md:text-5xl font-bold text-center mt-8 text-neutral-900 drop-shadow-[0_1px_0_rgba(255,255,255,.8)]">Каталоги напитков</h1>
+
+<!-- Пустое пространство с декоративным стеклянным блоком -->
+<div class="decorative-glass">
+  <div class="decorative-text">LOBAS EVENT</div>
+</div>
+
+<div class="gallery">
+  <!-- 7 афиш каталогов -->
+  <div onclick="openCatalog(1)" class="poster w-[220px] h-[320px] shadow-lg hover:shadow-2xl transition transform">
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-full object-cover"/>
+    <div class="absolute bottom-0 left-0 w-full glass p-4 transition-all">
+      <h2 class="text-xl font-semibold text-neutral-900">Premium Cocktails</h2>
+      <p class="text-sm text-neutral-700 mt-1">Элитный тариф с уникальными коктейлями</p>
     </div>
   </div>
+  <div onclick="openCatalog(2)" class="poster w-[220px] h-[320px] shadow-lg hover:shadow-2xl transition transform">
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-full object-cover"/>
+    <div class="absolute bottom-0 left-0 w-full glass p-4 transition-all">
+      <h2 class="text-xl font-semibold text-neutral-900">Classic Cocktails</h2>
+      <p class="text-sm text-neutral-700 mt-1">Любимые коктейли в вечной классике</p>
+    </div>
+  </div>
+  <div onclick="openCatalog(3)" class="poster w-[220px] h-[320px] shadow-lg hover:shadow-2xl transition transform">
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-full object-cover"/>
+    <div class="absolute bottom-0 left-0 w-full glass p-4 transition-all">
+      <h2 class="text-xl font-semibold text-neutral-900">Signature Cocktails</h2>
+      <p class="text-sm text-neutral-700 mt-1">Авторские сочетания и редкие ингредиенты</p>
+    </div>
+  </div>
+  <div onclick="openCatalog(4)" class="poster w-[220px] h-[320px] shadow-lg hover:shadow-2xl transition transform">
+    <img src="https://res.cloudinary.com/glide/image/f_fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-full object-cover"/>
+    <div class="absolute bottom-0 left-0 w-full glass p-4 transition-all">
+      <h2 class="text-xl font-semibold text-neutral-900">Exotic Cocktails</h2>
+      <p class="text-sm text-neutral-700 mt-1">Экзотические вкусы и редкие ингредиенты</p>
+    </div>
+  </div>
+  <div onclick="openCatalog(5)" class="poster w-[220px] h-[320px] shadow-lg hover:shadow-2xl transition transform">
+    <img src="https://res.cloudinary.com/glide/image/f_fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-full object-cover"/>
+    <div class="absolute bottom-0 left-0 w-full glass p-4 transition-all">
+      <h2 class="text-xl font-semibold text-neutral-900">Seasonal Cocktails</h2>
+      <p class="text-sm text-neutral-700 mt-1">Сезонные лимитированные коктейли</p>
+    </div>
+  </div>
+  <div onclick="openCatalog(6)" class="poster w-[220px] h-[320px] shadow-lg hover:shadow-2xl transition transform">
+    <img src="https://res.cloudinary.com/glide/image/f_fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-full object-cover"/>
+    <div class="absolute bottom-0 left-0 w-full glass p-4 transition-all">
+      <h2 class="text-xl font-semibold text-neutral-900">VIP Cocktails</h2>
+      <p class="text-sm text-neutral-700 mt-1">Для избранных клиентов и мероприятий</p>
+    </div>
+  </div>
+  <div onclick="openCatalog(7)" class="poster w-[220px] h-[320px] shadow-lg hover:shadow-2xl transition transform">
+    <img src="https://res.cloudinary.com/glide/image/f_fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-full object-cover"/>
+    <div class="absolute bottom-0 left-0 w-full glass p-4 transition-all">
+      <h2 class="text-xl font-semibold text-neutral-900">Special Cocktails</h2>
+      <p class="text-sm text-neutral-700 mt-1">Редкие и уникальные рецепты</p>
+    </div>
+  </div>
+</div>
 
-  <div class="overlay" id="overlay" onclick="closeCatalog(event)">
-    <div class="slide-window" id="slideWindow" onclick="event.stopPropagation()">
-      <div class="slide-header">
-        <h3 id="catalogTitle"></h3>
-        <p id="catalogDesc"></p>
+<!-- Затемнение и Slide-in Bottom Sheet -->
+<div id="overlay" onclick="closeCatalog()" class="fixed inset-0 bg-black/30 hidden"></div>
+<div id="sheet" class="fixed inset-x-0 bottom-0 glass-strong rounded-t-3xl shadow-2xl hidden transition-transform transform translate-y-full max-h-[90vh] flex flex-col">
+  <div class="w-12 h-1.5 bg-neutral-400/60 rounded-full mx-auto my-3"></div>
+  <div class="px-6 text-center mt-2 fade-slide" id="catalogHeader">
+    <h2 id="catalogTitle" class="text-2xl font-bold text-neutral-900"></h2>
+    <p id="catalogDesc" class="text-sm text-neutral-700 mt-1"></p>
+  </div>
+  <div class="relative flex items-end px-10 py-4 flex-1">
+    <button id="prevBtn" class="hidden md:flex absolute -left-1.5 h-16 w-10 glass rounded-full items-center justify-center text-xl font-bold hover:bg-white/60 transition z-10 select-none">&lt;</button>
+    <div id="catalogItems" class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pr-6 pl-6"></div>
+    <button id="nextBtn" class="hidden md:flex absolute -right-1.5 h-16 w-10 glass rounded-full items-center justify-center text-xl font-bold hover:bg-white/60 transition z-10 select-none">&gt;</button>
+  </div>
+</div>
+
+<script>
+const IMG = "https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg";
+function rnd() { return { price: (Math.random()*15 + 5).toFixed(2) + ' $', abv: (Math.random()*15 + 5).toFixed(0) + '%', volume: (Math.random()*150 + 150).toFixed(0) + ' мл', rating: (Math.random()*2 + 3).toFixed(1) + ' ⭐' } }
+const catalogs = {
+1: { title: "Premium Cocktails", desc: "Элитный тариф с уникальными коктейлями", items: Array.from({length:12}, (_,i)=>({ name: `Premium Cocktail ${i+1}`, desc: "Изысканный вкус "+i, img: IMG, ...rnd() })) },
+2: { title: "Classic Cocktails", desc: "Любимые коктейли в вечной классике", items: Array.from({length:12}, (_,i)=>({ name: `Classic Cocktail ${i+1}`, desc: "Любимые напитки "+i, img: IMG, ...rnd() })) },
+3: { title: "Signature Cocktails", desc: "Авторские сочетания и редкие ингредиенты", items: Array.from({length:12}, (_,i)=>({ name: `Signature Cocktail ${i+1}`, desc: "Уникальные сочетания "+i, img: IMG, ...rnd() })) },
+4: { title: "Exotic Cocktails", desc: "Экзотические вкусы и редкие ингредиенты", items: Array.from({length:12}, (_,i)=>({ name: `Exotic Cocktail ${i+1}`, desc: "Экзотика "+i, img: IMG, ...rnd() })) },
+5: { title: "Seasonal Cocktails", desc: "Сезонные лимитированные коктейли", items: Array.from({length:12}, (_,i)=>({ name: `Seasonal Cocktail ${i+1}`, desc: "Сезонное "+i, img: IMG, ...rnd() })) },
+6: { title: "VIP Cocktails", desc: "Для избранных клиентов и мероприятий", items: Array.from({length:12}, (_,i)=>({ name: `VIP Cocktail ${i+1}`, desc: "Эксклюзивное "+i, img: IMG, ...rnd() })) },
+7: { title: "Special Cocktails", desc: "Редкие и уникальные рецепты", items: Array.from({length:12}, (_,i)=>({ name: `Special Cocktail ${i+1}`, desc: "Редкость "+i, img: IMG, ...rnd() })) }
+};
+
+function openCatalog(id) {
+  const catalog = catalogs[id];
+  document.getElementById("catalogTitle").textContent = catalog.title;
+  document.getElementById("catalogDesc").textContent = catalog.desc;
+  const container = document.getElementById("catalogItems");
+  container.innerHTML = "";
+  catalog.items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'drink-card';
+    card.innerHTML = `
+      <img src="${item.img}" alt="${item.name}" />
+      <div class="drink-info">
+        <h3 class="font-semibold text-base">${item.name}</h3>
+        <p class="text-xs mt-1">${item.desc}</p>
+        <p class="text-xs mt-1">${item.price} | ${item.volume} | ${item.abv} | ${item.rating}</p>
       </div>
-      <div class="drinks" id="drinks"></div>
-    </div>
-  </div>
+    `;
+    container.appendChild(card);
+  });
+  document.getElementById("overlay").classList.remove("hidden");
+  const sheet = document.getElementById("sheet");
+  sheet.classList.remove("translate-y-full", "hidden");
+  setTimeout(()=> {
+    document.getElementById("catalogHeader").classList.add("active");
+  }, 50);
+}
 
-  <script>
-    function openCatalog(title, desc) {
-      document.getElementById('catalogTitle').textContent = title;
-      document.getElementById('catalogDesc').textContent = desc;
+function closeCatalog() {
+  document.getElementById("overlay").classList.add("hidden");
+  const sheet = document.getElementById("sheet");
+  sheet.classList.add("translate-y-full");
+  document.getElementById("catalogHeader").classList.remove("active");
+}
+</script>
 
-      const drinks = [
-        { img: 'drink1.jpg', info: 'Коктейль 1 — крепость 12%, фрукты, лёд' },
-        { img: 'drink2.jpg', info: 'Коктейль 2 — цитрусовый, освежающий' },
-        { img: 'drink3.jpg', info: 'Коктейль 3 — ваниль, специи, сладость' },
-        { img: 'drink4.jpg', info: 'Коктейль 4 — ягодный, лёгкий, летний' },
-      ];
-
-      const container = document.getElementById('drinks');
-      container.innerHTML = '';
-      drinks.forEach(drink => {
-        const div = document.createElement('div');
-        div.classList.add('drink');
-        div.innerHTML = `
-          <img src="${drink.img}" alt="Напиток">
-          <div class="drink-info">${drink.info}</div>
-        `;
-        container.appendChild(div);
-      });
-
-      document.getElementById('overlay').classList.add('active');
-    }
-
-    function closeCatalog(e) {
-      if (e.target.id === 'overlay') {
-        document.getElementById('overlay').classList.remove('active');
-      }
-    }
-  </script>
 </body>
 </html>
