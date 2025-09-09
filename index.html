@@ -9,7 +9,8 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f4f4f4;
+  background: url("https://res.cloudinary.com/glide/image/fetch/f_auto,w_675,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/YHvEGQ7gKxwfedZm9Io8.png") repeat center center fixed;
+  background-size: contain;
 }
 
 h1 {
@@ -17,6 +18,8 @@ h1 {
   margin-top: 2rem;
   font-size: 2.5rem;
   font-weight: bold;
+  color: #111;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
 }
 
 /* Галерея афиш */
@@ -176,49 +179,49 @@ h1 {
 <!-- Галерея афиш -->
 <div class="gallery">
   <div onclick="openCatalog(1)" class="poster">
-    <img src="https://via.placeholder.com/220x320" />
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" />
     <div class="overlay">
       <h2>Premium Cocktails</h2>
       <p>Элитный тариф</p>
     </div>
   </div>
   <div onclick="openCatalog(2)" class="poster">
-    <img src="https://via.placeholder.com/220x320" />
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" />
     <div class="overlay">
       <h2>Classic Cocktails</h2>
       <p>Классика вкуса</p>
     </div>
   </div>
   <div onclick="openCatalog(3)" class="poster">
-    <img src="https://via.placeholder.com/220x320" />
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" />
     <div class="overlay">
       <h2>Signature Cocktails</h2>
       <p>Авторские рецепты</p>
     </div>
   </div>
   <div onclick="openCatalog(4)" class="poster">
-    <img src="https://via.placeholder.com/220x320" />
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" />
     <div class="overlay">
       <h2>Exotic Cocktails</h2>
       <p>Экзотические вкусы</p>
     </div>
   </div>
   <div onclick="openCatalog(5)" class="poster">
-    <img src="https://via.placeholder.com/220x320" />
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" />
     <div class="overlay">
       <h2>Seasonal Cocktails</h2>
       <p>Сезонные напитки</p>
     </div>
   </div>
   <div onclick="openCatalog(6)" class="poster">
-    <img src="https://via.placeholder.com/220x320" />
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" />
     <div class="overlay">
       <h2>VIP Cocktails</h2>
       <p>Эксклюзив</p>
     </div>
   </div>
   <div onclick="openCatalog(7)" class="poster">
-    <img src="https://via.placeholder.com/220x320" />
+    <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" />
     <div class="overlay">
       <h2>Special Cocktails</h2>
       <p>Редкие рецепты</p>
@@ -237,7 +240,7 @@ h1 {
 </div>
 
 <script>
-const IMG = "https://via.placeholder.com/180x320";
+const IMG = "https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg";
 function rnd() { return { price: (Math.random()*15 + 5).toFixed(2) + '$', abv: (Math.random()*15 + 5).toFixed(0)+'%', volume: (Math.random()*150 + 150).toFixed(0)+'мл' } }
 const catalogs = {
 1: { title: "Premium Cocktails", desc: "Элитный тариф с уникальными коктейлями", items: Array.from({length:12}, (_,i)=>({ name:`Premium ${i+1}`, desc:"Изысканный вкус", img: IMG, ...rnd() })) },
@@ -258,21 +261,4 @@ function openCatalog(id){
   catalog.items.forEach(item=>{
     const card = document.createElement("div");
     card.className = "drink-card";
-    card.innerHTML = `<img src="${item.img}" /><div class="drink-info"><h3>${item.name}</h3><p>${item.desc}</p><p>${item.price} | ${item.volume} | ${item.abv}</p></div>`;
-    container.appendChild(card);
-  });
-  document.getElementById("overlay").style.display = "block";
-  const sheet = document.getElementById("sheet");
-  sheet.classList.add("show");
-  setTimeout(()=>document.getElementById("catalogHeader").classList.add("active"),50);
-}
-
-function closeCatalog(){
-  document.getElementById("overlay").style.display = "none";
-  const sheet = document.getElementById("sheet");
-  sheet.classList.remove("show");
-  document.getElementById("catalogHeader").classList.remove("active");
-}
-</script>
-</body>
-</html>
+    card.innerHTML = `<img src="${item.img}" /><div class="drink-info"><h3>${item.name}</h3><p>${item.desc}</p><p>${item.price
