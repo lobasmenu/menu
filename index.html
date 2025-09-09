@@ -7,131 +7,106 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background: url('https://res.cloudinary.com/glide/image/fetch/f_auto,w_675,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FYHvEGQ7gKxwfedZm9Io8.png') repeat center center fixed;
-      background-size: cover;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url("https://res.cloudinary.com/glide/image/fetch/f_auto,w_675,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FYHvEGQ7gKxwfedZm9Io8.png")
+                  no-repeat center top;
+      background-size: 100% auto;
+      background-repeat: repeat-y;
     }
-
     .glass {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
-
-    .catalog-card:hover img {
-      filter: blur(3px) brightness(0.8);
-      transition: all 0.4s ease-in-out;
+    .catalog-card:hover .glass-text {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
-
-    .catalog-card img {
-      transition: all 0.4s ease-in-out;
+    .slide-panel {
+      transition: transform 0.4s ease-in-out;
+    }
+    .slide-panel.hidden {
+      transform: translateY(100%);
+    }
+    .slide-panel.visible {
+      transform: translateY(0);
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center text-gray-800">
-
-  <h1 class="text-3xl font-bold text-center mt-8 mb-6 drop-shadow-lg">Каталоги коктейлей</h1>
-
-  <!-- Сетка каталогов -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 px-6 w-full max-w-5xl">
-    
-    <!-- Каталог -->
-    <div class="catalog-card glass rounded-2xl overflow-hidden shadow-lg cursor-pointer" onclick="openCatalog(1)">
-      <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-72 object-cover" alt="Каталог 1">
-      <div class="glass p-4 text-center">
-        <h2 class="text-xl font-semibold">Тариф "Премиум"</h2>
-        <p class="text-sm mt-2">Лучшие авторские коктейли и эксклюзивные сочетания.</p>
-      </div>
-    </div>
-
-    <!-- Повторяем ещё 6 каталогов -->
-    <div class="catalog-card glass rounded-2xl overflow-hidden shadow-lg cursor-pointer" onclick="openCatalog(2)">
-      <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-72 object-cover" alt="Каталог 2">
-      <div class="glass p-4 text-center">
-        <h2 class="text-xl font-semibold">Тариф "Стандарт"</h2>
-        <p class="text-sm mt-2">Классика для любых мероприятий.</p>
-      </div>
-    </div>
-
-    <div class="catalog-card glass rounded-2xl overflow-hidden shadow-lg cursor-pointer" onclick="openCatalog(3)">
-      <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-72 object-cover" alt="Каталог 3">
-      <div class="glass p-4 text-center">
-        <h2 class="text-xl font-semibold">Тариф "Экспресс"</h2>
-        <p class="text-sm mt-2">Популярные коктейли — быстро и удобно.</p>
-      </div>
-    </div>
-
-    <div class="catalog-card glass rounded-2xl overflow-hidden shadow-lg cursor-pointer" onclick="openCatalog(4)">
-      <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-72 object-cover" alt="Каталог 4">
-      <div class="glass p-4 text-center">
-        <h2 class="text-xl font-semibold">Тариф "Авторский"</h2>
-        <p class="text-sm mt-2">Индивидуальные коктейли под ваш вкус.</p>
-      </div>
-    </div>
-
-    <div class="catalog-card glass rounded-2xl overflow-hidden shadow-lg cursor-pointer" onclick="openCatalog(5)">
-      <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-72 object-cover" alt="Каталог 5">
-      <div class="glass p-4 text-center">
-        <h2 class="text-xl font-semibold">Тариф "Сезонный"</h2>
-        <p class="text-sm mt-2">Напитки, вдохновлённые временем года.</p>
-      </div>
-    </div>
-
-    <div class="catalog-card glass rounded-2xl overflow-hidden shadow-lg cursor-pointer" onclick="openCatalog(6)">
-      <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-72 object-cover" alt="Каталог 6">
-      <div class="glass p-4 text-center">
-        <h2 class="text-xl font-semibold">Тариф "Экзотика"</h2>
-        <p class="text-sm mt-2">Яркие и необычные вкусы со всего мира.</p>
-      </div>
-    </div>
-
-    <div class="catalog-card glass rounded-2xl overflow-hidden shadow-lg cursor-pointer sm:col-span-2 sm:justify-self-center" onclick="openCatalog(7)">
-      <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-72 object-cover" alt="Каталог 7">
-      <div class="glass p-4 text-center">
-        <h2 class="text-xl font-semibold">Тариф "VIP"</h2>
-        <p class="text-sm mt-2">Эксклюзивный сервис и лучшие позиции.</p>
-      </div>
-    </div>
-
+<body class="text-gray-900">
+  <div class="min-h-screen flex flex-col items-center py-10">
+    <h1 class="text-4xl font-bold mb-8 text-white drop-shadow-lg">Каталоги коктейлей</h1>
+    <div id="catalogs" class="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 w-full max-w-5xl"></div>
   </div>
 
-  <!-- Модальное окно каталога -->
-  <div id="catalogModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl max-w-5xl w-full p-6 relative">
-      <button class="absolute top-2 right-4 text-white text-2xl" onclick="closeCatalog()">&times;</button>
-      <h2 id="catalogTitle" class="text-2xl font-bold mb-4">Каталог</h2>
-      <div id="catalogContent" class="flex space-x-6 overflow-x-auto pb-4">
-        <!-- Здесь будут карточки коктейлей -->
-      </div>
-    </div>
+  <!-- Slide-in panel -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden"></div>
+  <div id="catalogPanel" class="fixed bottom-0 left-0 w-full h-3/4 bg-white/30 backdrop-blur-xl glass slide-panel hidden overflow-x-auto whitespace-nowrap p-6">
+    <div id="catalogContent" class="flex space-x-4"></div>
   </div>
 
   <script>
-    const modal = document.getElementById("catalogModal");
-    const catalogTitle = document.getElementById("catalogTitle");
+    const catalogs = [
+      { id: 1, title: "Тариф Classic", desc: "Базовый набор коктейлей.", img: "https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" },
+      { id: 2, title: "Тариф Premium", desc: "Расширенный выбор.", img: "https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" },
+      { id: 3, title: "Тариф Party", desc: "Для шумных вечеринок.", img: "https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" },
+      { id: 4, title: "Тариф Light", desc: "Легкие коктейли.", img: "https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" },
+      { id: 5, title: "Тариф Exotic", desc: "Яркие экзотические вкусы.", img: "https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" },
+      { id: 6, title: "Тариф Luxury", desc: "Премиальное меню.", img: "https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" },
+      { id: 7, title: "Тариф Seasonal", desc: "Сезонные новинки.", img: "https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" }
+    ];
+
+    const drinks = Array.from({ length: 12 }, (_, i) => ({
+      title: `Коктейль ${i+1}`,
+      desc: "Описание коктейля...",
+      price: `${200 + i*10} ₽`,
+      img: "https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg"
+    }));
+
+    const catalogsContainer = document.getElementById("catalogs");
+    catalogs.forEach(cat => {
+      const card = document.createElement("div");
+      card.className = "catalog-card relative cursor-pointer overflow-hidden glass max-w-sm h-80 w-full mx-auto";
+      card.innerHTML = `
+        <img src="${cat.img}" class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 hover:scale-105">
+        <div class="absolute bottom-0 left-0 w-full p-4 glass-text glass text-white">
+          <h2 class="text-xl font-semibold">${cat.title}</h2>
+          <p class="text-sm">${cat.desc}</p>
+        </div>
+      `;
+      card.onclick = () => openCatalog(cat);
+      catalogsContainer.appendChild(card);
+    });
+
+    const overlay = document.getElementById("overlay");
+    const panel = document.getElementById("catalogPanel");
     const catalogContent = document.getElementById("catalogContent");
 
-    function openCatalog(id) {
-      catalogTitle.innerText = `Каталог ${id}`;
-      catalogContent.innerHTML = "";
-      for (let i = 1; i <= 10; i++) {
-        catalogContent.innerHTML += `
-          <div class="glass rounded-xl w-56 flex-shrink-0 shadow-md">
-            <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_500,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FTAPjb2GQS3bpIi2Qh1vu%2Fpub%2FlsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-40 object-cover rounded-t-xl" alt="Коктейль ${i}">
-            <div class="p-4 text-center">
-              <h3 class="font-semibold">Коктейль ${i}</h3>
-              <p class="text-sm text-gray-700">Описание вкуса и особенностей.</p>
-              <p class="mt-2 font-bold">Цена: ${300 + i * 20} ₽</p>
-            </div>
-          </div>
-        `;
-      }
-      modal.classList.remove("hidden");
+    function openCatalog(cat) {
+      catalogContent.innerHTML = drinks.map(d => `
+        <div class='glass inline-block w-56 h-96 p-4 align-top'>
+          <img src='${d.img}' class='w-full h-2/3 object-cover rounded-lg mb-2'>
+          <h3 class='text-lg font-bold'>${d.title}</h3>
+          <p class='text-sm mb-1'>${d.desc}</p>
+          <p class='text-md font-semibold'>${d.price}</p>
+        </div>
+      `).join("");
+      overlay.classList.remove("hidden");
+      panel.classList.remove("hidden","hidden");
+      setTimeout(() => panel.classList.add("visible"), 10);
     }
 
-    function closeCatalog() {
-      modal.classList.add("hidden");
-    }
+    overlay.onclick = () => {
+      panel.classList.remove("visible");
+      setTimeout(() => {
+        overlay.classList.add("hidden");
+        panel.classList.add("hidden");
+      }, 400);
+    };
   </script>
 </body>
 </html>
