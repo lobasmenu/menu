@@ -117,7 +117,9 @@
 
   <!-- overlay + slide-in sheet -->
   <div id="overlay"></div>
-  <div id="sheet" class="hidden">
+
+  <!-- note: sheet is present (not display:none). shown/hidden by toggling .visible (translateY) -->
+  <div id="sheet">
     <div class="sheet-inner" style="height:80vh">
       <div style="width:44px;height:6px;background:rgba(100,100,100,0.2);border-radius:999px;margin:8px auto 12px"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:0 8px 8px">
@@ -150,6 +152,7 @@
     // ensure only two per row and center last if solitary when viewport >=640
     function adjustLast() {
       const grid = document.getElementById('catalogGrid');
+      if (!grid) return;
       const items = Array.from(grid.children);
       items.forEach(it => it.classList.remove('only-last'));
       const cols = window.innerWidth >= 640 ? 2 : 1;
@@ -176,17 +179,21 @@
       catalog.items.forEach((it, idx) => {
         const card = document.createElement('div');
         card.className = 'drink-card';
-        card.innerHTML = `<img src="${it.img}" alt="${it.name}"><div class=\"drink-meta\"><h3 style=\"margin:0;font-weight:700\">${it.name}</h3><p style=\"margin:6px 0 0;color:#444\">${it.desc}</p><p style=\"margin-top:8px;font-weight:700\">${it.price}</p></div>`;
+        card.innerHTML = `<img src="${it.img}" alt="${it.name}"><div class="drink-meta"><h3 style="margin:0;font-weight:700">${it.name}</h3><p style="margin:6px 0 0;color:#444">${it.desc}</p><p style="margin-top:8px;font-weight:700">${it.price}</p></div>`;
         catalogItems.appendChild(card);
         setTimeout(()=>card.classList.add('active'), 40 + idx*20);
       });
+
       overlay.style.display = 'block';
       sheet.classList.add('visible');
+
       // show buttons on desktop
       if (window.innerWidth >= 768) { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); }
       else { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); }
+
       // make sure scroll starts at 0
       catalogItems.scrollLeft = 0;
+
       // wire buttons
       const cardEl = catalogItems.querySelector('.drink-card');
       const gap = 16; // px
