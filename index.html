@@ -36,9 +36,9 @@
     -webkit-backdrop-filter: blur(18px) saturate(120%);
   }
   .glass-strong {
-    background: rgba(255,255,255,0.5);
-    backdrop-filter: blur(22px) saturate(130%);
-    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
   }
   .overlay {
     position: absolute;
@@ -113,43 +113,4 @@
     <img src="https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg" class="w-full h-[30rem] object-cover"/>
     <div class="absolute bottom-0 left-0 w-full glass p-6 transition-all">
       <h2 class="text-2xl font-semibold text-neutral-900">Special Cocktails</h2>
-      <p class="text-sm text-neutral-700 mt-1">Редкие и уникальные рецепты</p>
-    </div>
-  </div>
-</div>
-
-<!-- Затемнение и Slide-in Bottom Sheet остаются без изменений -->
-<div id="overlay" onclick="closeCatalog()" class="fixed inset-0 bg-black/30 hidden"></div>
-<div id="sheet" class="fixed inset-x-0 bottom-0 glass-strong rounded-t-3xl shadow-2xl hidden transition-transform transform translate-y-full max-h-[90vh] flex flex-col">
-  <div class="w-12 h-1.5 bg-neutral-400/60 rounded-full mx-auto my-3"></div>
-  <div class="flex items-center justify-between px-6">
-    <h2 id="catalogTitle" class="text-2xl font-bold text-neutral-900"></h2>
-    <button onclick="closeCatalog()" class="text-neutral-700 hover:text-neutral-900 text-xl">✕</button>
-  </div>
-  <div class="relative flex items-center px-10 py-4">
-    <button id="prevBtn" class="hidden md:flex absolute -left-1.5 h-16 w-10 glass rounded-full items-center justify-center text-xl font-bold hover:bg-white/60 transition z-10 select-none">&lt;</button>
-    <div id="catalogItems" class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pr-6 pl-6"></div>
-    <button id="nextBtn" class="hidden md:flex absolute -right-1.5 h-16 w-10 glass rounded-full items-center justify-center text-xl font-bold hover:bg-white/60 transition z-10 select-none">&gt;</button>
-  </div>
-</div>
-
-<script>
-const IMG = "https://res.cloudinary.com/glide/image/fetch/f_auto,w_900,c_limit/https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/TAPjb2GQS3bpIi2Qh1vu/pub/lsVkw6A2qYrMmByf9dlF.jpeg";
-function rnd() { return { price: (Math.random()*15 + 5).toFixed(2) + ' $', abv: (Math.random()*15 + 5).toFixed(0) + '%', volume: (Math.random()*150 + 150).toFixed(0) + ' мл', rating: (Math.random()*2 + 3).toFixed(1) + ' ⭐' } }
-const catalogs = {
-1: { title: "Premium Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Premium Cocktail ${i+1}`, desc: "Изысканный вкус", img: IMG, ...rnd() })) },
-2: { title: "Classic Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Classic Cocktail ${i+1}`, desc: "Любимые напитки", img: IMG, ...rnd() })) },
-3: { title: "Signature Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Signature Cocktail ${i+1}`, desc: "Уникальные сочетания", img: IMG, ...rnd() })) },
-4: { title: "Exotic Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Exotic Cocktail ${i+1}`, desc: "Экзотические вкусы", img: IMG, ...rnd() })) },
-5: { title: "Seasonal Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Seasonal Cocktail ${i+1}`, desc: "Сезонные лимитированные", img: IMG, ...rnd() })) },
-6: { title: "VIP Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `VIP Cocktail ${i+1}`, desc: "Для избранных", img: IMG, ...rnd() })) },
-7: { title: "Special Cocktails", items: Array.from({length:12}, (_,i)=>({ name: `Special Cocktail ${i+1}`, desc: "Редкие рецепты", img: IMG, ...rnd() })) }
-};
-function openCatalog(id) {
-  const catalog = catalogs[id];
-  document.getElementById("catalogTitle").textContent = catalog.title;
-  const container = document.getElementById("catalogItems");
-  container.innerHTML = "";
-  catalog.items.forEach((item, idx) => {
-    const card = document.createElement('div');
-    card.className = 'flex-none snap-center glass-strong rounded-3
+      <p class="
